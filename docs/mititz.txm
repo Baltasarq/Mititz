@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Mapa >
+<LocInic>Carretera</LocInic>
+<Locs >
+<Loc >
+<Nombre>Alrededores de Mititz</Nombre>
+<Desc>
+^{Caminando por el arcén de la carretera, pronto pierdes la esperanza de cruzarte con otro coche, tropezarte con otra gente... Las altas horas de la noche, y la alta humedad, que levanta volutas de bruma, provocan una sensación de desolación. El cartel a Mititz está aquí, pero el desvío se te antoja ominoso y poco amigable, a través de un oscuro bosque. Las buenas gentes estarán durmiendo, y con las no tan buenas... preferirías no encontrarte. Además, siguiendo las buenas costumbres de este país, el indicador no informa de distancias, y el pueblo no se adivina desde aquí. }<br/>
+La ${carretera, ex carretera} continua interminable, un desvío de una carreterita agrietada se interna en el ${bosque, ex bosque} de uno de sus márgenes. El desvío está señalizado mediante un ${cartel, ex cartel}.</Desc>
+<ESTE>Largo tramo de carretera</ESTE>
+<OESTE>Carretera</OESTE>
+</Loc>
+
+<Loc >
+<Nombre>Calle del pueblo</Nombre>
+<Desc>
+^{Las casas parecen elevarse, ominarse, a los lados de la estrecha calle. } Todos las ${puertas, ex puertas} y ${ventanas, ex ventanas} están cerradas a cal y canto. La calle se alarga en ambos sentidos, hacia el ${bosque, ex bosque} y hacia el ${centro del pueblo, ex centro}.</Desc>
+<ESTE>Claro del bosque</ESTE>
+<OESTE>Plaza del pueblo</OESTE>
+</Loc>
+
+<Loc >
+<Nombre>Camino</Nombre>
+<Desc>
+^{El camino se interna cada vez más, mientras el bosque se vuelve cada vez más denso a tu alrededor. Apartas ramas y hojas lejos de ti, mientras evitas arbustos que hacen que el camino se transforme en sendero. En ocasiones, miras hacia atrás como temiendo que el sendero tras tu paso haya desaparecido en un golpe de tenebrosa magia.<br/>}
+A través de la vegetación, puedes seguir internándote en el bosque por el ${sendero, ex sendero} desde la ${carretera, s}.</Desc>
+<NORTE>Claro del bosque</NORTE>
+<SUR>Largo tramo de carretera</SUR>
+</Loc>
+
+<Loc >
+<Nombre>Carretera</Nombre>
+<Desc>
+Avanzas con los ojos entrecerrados, intentando adivinar tras cada curva la nueva dirección del asfalto, gracias a la luz de los faros, que ayudan lo que pueden en aclarar las tinieblas. La noche ha caído pronto en este día de invierno, una noche con luna pero a la vez oscura y ominosa, incómodo marco por el que discurre el largo camino a casa.
+De pronto, el motor empieza a toser. Una punzada asciende en tu interior. Tratas de acelerarlo para evitar el inevitable desenlace, pero sabes que no servirá de nada. La reparación largo tiempo pospuesta lo hubiera evitado, pero hay otras, y no pocas, necesidades en tu vida. Con un largo suspiro, acercas el coche y lo detienes en el arcén, parte sobre el asfalto, y la otra sobre la hierba, aprovechando los últimos estertores del motor. No gritas, aunque lo deseas; no golpeas el volante, pues sabes que no serviría de nada. Solo te permites otro largo, prolongado, suspiro.
+Compruebas el móvil. Sin apenas batería (como siempre), pero más importante, sin cobertura en esta zona de montaña. ¿Cuándo viste la última gasolinera? Crees recordar que fue como a cinco kilómetros más atrás, pasado de largo aquel reciente desvío, con un cartel con aquel nombre... que llamó tu atención... para un pueblo: Mititz.
+^{Armándote de paciencia, sales a la fría noche y te subes las solapas de la gabardina.}
+La ${carretera, ex carretera} parece no tener fin, flanqueada por un denso ${bosque, ex bosque}, aunque aún así debes retroceder para encontrar la gasolinera, el único sitio donde podrán ayudarte. Tu ${coche, ex coche} está en el arcén.</Desc>
+<ESTE>Alrededores de Mititz</ESTE>
+</Loc>
+
+<Loc >
+<Nombre>Claro del bosque</Nombre>
+<Desc>
+^{Tras una pequeña lucha con ramas y arbustos que te hacen preguntarte si has abandonado el sendero, llegas a una zona repentinamente limpia. }Un ${claro, ex claro} en el ${bosque, ex bosque} se extiende ante ti, pero lo más llamativo es lo que ves dentro de él, a cierta distancia. Un ${corro} de figuras de blanco destaca en la oscuridad, acompañado de cánticos que parecen... tétricos.</Desc>
+<SUR>Camino</SUR>
+<OESTE>Calle del pueblo</OESTE>
+</Loc>
+
+<Loc >
+<Nombre>Cripta</Nombre>
+<Desc>
+Este lugar es más parecido a una cueva que a una típica cripta bajo la iglesia. En su centro, puedes ver una gran ${figura, ex figura} que preside el subterráneo. Unas ${escaleras, ex escaleras} permiten ascender al nivel del suelo. A los lados, puedes ver varios ${sepulcros, ex sepulcros}.</Desc>
+<ARRIBA>Interior de la iglesia</ARRIBA>
+</Loc>
+
+<Loc >
+<Nombre>Interior de la iglesia</Nombre>
+<Desc>
+La iglesia realmente es muy pequeña. Unas tres filas de ${bancos, ex bancos} cortos se sitúan a ambos lados del ${pasillo, ex pasillo} central hacia el ${altar, ex altar}.</Desc>
+<ESTE>Plaza del pueblo</ESTE>
+<ABAJO>Cripta</ABAJO>
+</Loc>
+
+<Loc >
+<Nombre>Largo tramo de carretera</Nombre>
+<Desc>
+^{Un largo tramo de carretera realiza una curva muy amplia, tan amplia que casi parecería una recta, se extiende ante ti, aparentemente sin fin. Apenas puedes ver en la distancia a dónde se dirige por culpa de la oscuridad reinante, solo rota a retazos por la luna. Lo único seguro es que la gasolinera no está cerca, pues el resplandor de sus luces incluso se adivinaría desde considerable distancia.<br/>
+Un repentino destello blanco surge en tu visión periférica. Giras la cabeza a tiempo para poder ver una fugaz figura de blanco internarse en el bosque por un camino que abandona la carretera.<br/>}
+La ${carretera, ex carretera} se antoja inabarcable, horadando el ${bosque, ex bosque} en derredor. De la carretera parte un ${camino, ex camino} que se interna en la ominosa oscuridad.</Desc>
+<NORTE>Camino</NORTE>
+<OESTE>Alrededores de Mititz</OESTE>
+</Loc>
+
+<Loc >
+<Nombre>Plaza del pueblo</Nombre>
+<Desc>
+Apenas solo dos o tres calles terminan en esta pequeña plaza. La ${calle, ex calle} más ancha muere en la pequeña ${explanada, ex explanada} con una $fuente, ex fuente}, y al otro lado, la oscura ${iglesia, ex iglesia} del pueblo.</Desc>
+<ESTE>Calle del pueblo</ESTE>
+<OESTE>Interior de la iglesia</OESTE>
+</Loc>
+
+</Locs>
+
+<Objs >
+<Obj >
+<Nombre>altar</Nombre>
+<Desc>El altar es una gran mesa de madera. Al moverla, se descubre una trampilla que permite descender a algún tipo de subterráneo.</Desc>
+<estaEn>Interior de la iglesia</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+<Obj >
+<Nombre>bancos</Nombre>
+<Desc>Hay tres hileras de bancos, uno a cada lado del ${pasillo, ex pasillo} por fila.</Desc>
+<estaEn>Interior de la iglesia</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+<Obj >
+<Nombre>bosque</Nombre>
+<Desc>${El bosque, e} comienza muy cerca del comienzo de la calle.</Desc>
+<estaEn>Calle del pueblo</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+<Obj >
+<Nombre>bosque2</Nombre>
+<Desc>Denso y oscuro. Los árboles son muy altos en este punto.</Desc>
+<estaEn>Alrededores de Mititz</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+<Obj >
+<Nombre>bosque3</Nombre>
+<Desc>El bosque se mantiene más alejado aquí, respetando los ${arcenes, ex carretera}.</Desc>
+<estaEn>Largo tramo de carretera</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+<Obj >
+<Nombre>calle</Nombre>
+<Desc>Desde aquí permite alcanzar el ${bosque, e}.</Desc>
+<estaEn>Plaza del pueblo</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+<Obj >
+<Nombre>camino</Nombre>
+<Desc>Un camino que cerca de la carretera parece de gravilla, pero que se va estrechando a medida que se sumerge en el ${bosque, n}</Desc>
+<estaEn>Largo tramo de carretera</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+<Obj >
+<Nombre>carretera1</Nombre>
+<Desc>No muy ancha, pero por fortuna en buenas condiciones.</Desc>
+<estaEn>Carretera</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+<Obj >
+<Nombre>carretera2</Nombre>
+<Desc>Muy oscura, debido al ${bosque, ex bosque} que más que flanquearla, parece querer invadirla.</Desc>
+<estaEn>Alrededores de Mititz</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+<Obj >
+<Nombre>carretera3</Nombre>
+<Desc>Un tramo muy extenso sestá a la vista, perdiéndose aún así en ${la distancia, e}.</Desc>
+<estaEn>Largo tramo de carretera</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+<Obj >
+<Nombre>cartel</Nombre>
+<Desc>Se lee "Mititz" en su interior.</Desc>
+<estaEn>Alrededores de Mititz</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+<Obj >
+<Nombre>centro</Nombre>
+<Desc>La calle se adentra en ${el centro, o} del pueblo.</Desc>
+<estaEn>Calle del pueblo</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+<Obj >
+<Nombre>corro</Nombre>
+<Desc>Aunque no puedes reconocer sus facciones, se trata de un grupo de mujeres que parecen bailar al tétrico ritmo de unos cánticos realizados por ellas mismas. Esta música te parece tétrica en primera instancia, pero te produce miedo y angustia cuando te paras a escucharla con detenimiento, pese a no entender la lengua de las voces de la composición.</Desc>
+<estaEn>Claro del bosque</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+<Obj >
+<Nombre>escalera</Nombre>
+<Desc>Una escalera pétrea que asciende, tras los ${sepulcros, ex sepulcros} hacia la ${iglesia, arriba}.</Desc>
+<estaEn>Cripta</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+<Obj >
+<Nombre>explanada</Nombre>
+<Desc>La ${fuente, ex fuente} y la ${iglesia, ex iglesia} son sus principales reclamos.</Desc>
+<estaEn>Plaza del pueblo</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+<Obj >
+<Nombre>figura</Nombre>
+<Desc>Está cubierta de telarañas, musgo, y tierra. No reconoces la representación que intenta realizar.</Desc>
+<estaEn>Cripta</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+<Obj >
+<Nombre>fuente</Nombre>
+<Desc>No brota agua de ella.</Desc>
+<estaEn>Plaza del pueblo</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+<Obj >
+<Nombre>gabardina</Nombre>
+<Desc>Impermeable para proteger del frío y de la lluvia.</Desc>
+<estaEn>Carretera</estaEn>
+<Femenino>S</Femenino>
+</Obj>
+
+<Obj >
+<Nombre>iglesia</Nombre>
+<Desc>La ${iglesia, o} se alza ominosa sobre la explanada.</Desc>
+<estaEn>Plaza del pueblo</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+<Obj >
+<Nombre>pasillo</Nombre>
+<Desc>El pasillo se adentra por entre los ${bancos, ex bancos} hacia el ${altar, ex altar}.</Desc>
+<estaEn>Interior de la iglesia</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+<Obj >
+<Nombre>puertas</Nombre>
+<Desc>Cerradas a cal y canto.</Desc>
+<estaEn>Calle del pueblo</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+<Obj >
+<Nombre>sendero</Nombre>
+<Desc>Cada vez más estrecho, cada vez más adentro del ${bosque, n}.</Desc>
+<estaEn>Camino</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+<Obj >
+<Nombre>sepulcros</Nombre>
+<Desc>Varios sepulcros se encuentran a ambos lados.</Desc>
+<estaEn>Cripta</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+<Obj >
+<Nombre>traje</Nombre>
+<Desc>^{Este traje es el primer paso para tratar de ganarte la confianza de tus clientes.} Es un clásico de tres piezas.</Desc>
+<estaEn>Carretera</estaEn>
+</Obj>
+
+<Obj >
+<Nombre>ventanas</Nombre>
+<Desc>Cerradas a cal y punto.</Desc>
+<estaEn>Calle del pueblo</estaEn>
+<Escenario>S</Escenario>
+</Obj>
+
+</Objs>
+
+</Mapa>
+

@@ -1,0 +1,130 @@
+      0 txtMap v0.6 20140612
+      0 entrada: mititz.txt
+      0 ========================
+      1 nueva localidad 'Carretera'
+      3 tomando desc.
+      5 tomando desc.
+      7 tomando desc.
+      9 tomando desc.
+     10 tomando desc.
+     12 preparando primer movimiento
+     18 tomando desc. objeto
+     18 Aceptando desc. de objeto 
+     18 Objeto carretera1
+     21 tomando desc. objeto
+     21 Aceptando desc. de objeto 
+     21 Objeto gabardina
+     24 tomando objeto
+     24 Creando/modificando objeto (coger).
+     24 Objeto ya existente: gabardina
+     27 tomando desc. objeto
+     27 Aceptando desc. de objeto 
+     27 Objeto traje
+     30 tomando objeto
+     30 Creando/modificando objeto (coger).
+     30 Objeto ya existente: traje
+     35 nueva localidad 'Alrededores de Mititz'
+     35 'Carretera' por ESTE a 'Alrededores de Mititz'
+     35 'Alrededores de Mititz' por [inversa]  OESTE a 'Carretera'
+     37 tomando desc.
+     38 tomando desc.
+     40 tomando desc. objeto
+     40 Aceptando desc. de objeto 
+     40 Objeto carretera2
+     43 tomando desc. objeto
+     43 Aceptando desc. de objeto 
+     43 Objeto bosque2
+     46 tomando desc. objeto
+     46 Aceptando desc. de objeto 
+     46 Objeto cartel
+     51 nueva localidad 'Largo tramo de carretera'
+     51 'Alrededores de Mititz' por ESTE a 'Largo tramo de carretera'
+     51 'Largo tramo de carretera' por [inversa]  OESTE a 'Alrededores de Mititz'
+     53 tomando desc.
+     54 tomando desc.
+     55 tomando desc.
+     57 tomando desc. objeto
+     57 Aceptando desc. de objeto 
+     57 Objeto carretera3
+     60 tomando desc. objeto
+     60 Aceptando desc. de objeto 
+     60 Objeto bosque3
+     63 tomando desc. objeto
+     63 Aceptando desc. de objeto 
+     63 Objeto camino
+     68 nueva localidad 'Camino'
+     68 'Largo tramo de carretera' por NORTE a 'Camino'
+     68 'Camino' por [inversa]  SUR a 'Largo tramo de carretera'
+     70 tomando desc.
+     71 tomando desc.
+     73 tomando desc. objeto
+     73 Aceptando desc. de objeto 
+     73 Objeto sendero
+     78 nueva localidad 'Claro del bosque'
+     78 'Camino' por NORTE a 'Claro del bosque'
+     78 'Claro del bosque' por [inversa]  SUR a 'Camino'
+     80 tomando desc.
+     82 preparando primer movimiento
+     85 tomando desc. objeto
+     85 Aceptando desc. de objeto 
+     85 Objeto corro
+     90 nueva localidad 'Calle del pueblo'
+     90 'Claro del bosque' por OESTE a 'Calle del pueblo'
+     90 'Calle del pueblo' por [inversa]  ESTE a 'Claro del bosque'
+     92 tomando desc.
+     94 tomando desc. objeto
+     94 Aceptando desc. de objeto 
+     94 Objeto puertas
+     97 tomando desc. objeto
+     97 Aceptando desc. de objeto 
+     97 Objeto ventanas
+    100 tomando desc. objeto
+    100 Aceptando desc. de objeto 
+    100 Objeto bosque
+    103 tomando desc. objeto
+    103 Aceptando desc. de objeto 
+    103 Objeto centro
+    108 nueva localidad 'Plaza del pueblo'
+    108 'Calle del pueblo' por OESTE a 'Plaza del pueblo'
+    108 'Plaza del pueblo' por [inversa]  ESTE a 'Calle del pueblo'
+    110 tomando desc.
+    112 tomando desc. objeto
+    112 Aceptando desc. de objeto 
+    112 Objeto calle
+    115 tomando desc. objeto
+    115 Aceptando desc. de objeto 
+    115 Objeto fuente
+    118 tomando desc. objeto
+    118 Aceptando desc. de objeto 
+    118 Objeto explanada
+    121 tomando desc. objeto
+    121 Aceptando desc. de objeto 
+    121 Objeto iglesia
+    126 nueva localidad 'Interior de la iglesia'
+    126 'Plaza del pueblo' por OESTE a 'Interior de la iglesia'
+    126 'Interior de la iglesia' por [inversa]  ESTE a 'Plaza del pueblo'
+    128 tomando desc.
+    130 tomando desc. objeto
+    130 Aceptando desc. de objeto 
+    130 Objeto bancos
+    133 tomando desc. objeto
+    133 Aceptando desc. de objeto 
+    133 Objeto pasillo
+    136 tomando desc. objeto
+    136 Aceptando desc. de objeto 
+    136 Objeto altar
+    141 nueva localidad 'Cripta'
+    141 'Interior de la iglesia' por ABAJO a 'Cripta'
+    141 'Cripta' por [inversa]  ARRIBA a 'Interior de la iglesia'
+    143 tomando desc.
+    145 tomando desc. objeto
+    145 Aceptando desc. de objeto 
+    145 Objeto figura
+    148 tomando desc. objeto
+    148 Aceptando desc. de objeto 
+    148 Objeto sepulcros
+    151 tomando desc. objeto
+    151 Aceptando desc. de objeto 
+    151 Objeto escalera
+    155 FINLOC encontrado
+    156 Fin del proceso de mititz.txt ...

@@ -79,12 +79,9 @@ const locMititzSurroundings = ctrl.places.crea(
                                 ¡${huir, ex final}!, debes huir..." );
                 };
 
-                ctrl.print( "Tras descubrir un pasadizo en la tumba, \
-                             te lanzaste a correr sin freno, atravesando \
-                             el bosque y llegando, de nuevo, \
-                             a la carretera." );
+                ctrl.print( "Frenético, quieres lanzarte a correr sin freno..." );
                 
-                ctrl.print( "Corres, y corres, tropezando cada pocas \
+                ctrl.print( "Y corres, y corres, tropezando cada pocas \
                              zancadas, ¡debes ${huir, ex final}!" );
             }
 
@@ -380,8 +377,34 @@ const locPathToVillage = ctrl.places.crea(
     function() {
         this.pic = "res/path.jpg";
         this.setExit( "oeste", locVillageStreet );
+        this.preExamine = function() {
+            player.desc = "Gabriel, vendedor ansioso, frenético, \
+                           y muerto de miedo.";
+        };
     }
 );
+
+const MsgsAtmosphere = new MsgList([
+    "En algún lugar cercano a ti, algún ser vivo corretea...",
+    "Por encima de tu cabeza, escuchas siniestros susurros y \
+     apresuradas pisadas.",
+    "Tratas de calmar tu respiración, pese a la ansiedad que sientes.",
+    "Escuchas el largo, rasposo sonido de un mueble \
+     siendo arrastrado ahí arriba.",
+    "Te pasas una mano por la cabeza... ¿Qué pretenderán hacer contigo?",
+    "Alguna piedra se desprende en algún lugar... ",
+    "Una aguda punzada en el estómago te recuerda que probablemente, \
+     te estés jugando la vida. Como si necesitaras que te lo recordaran.",
+    "Una araña corretea, pasando por encima de tu zapato y rápidamente \
+     escondiéndose en una grieta.",
+    "Ahí arriba, vuelves a escuchar esos siniestros cánticos... \
+     Te llevas las manos a los oídos... no puedes soportarlo. No más ... \
+     No más...",
+    "Te llevas la mano frente a la boca cuando te atragantas \
+     de puro nerviosisimo... estás temblando como una hoja...",
+    "Te apoyas en uno de los sepulcros por un momento, y musitas una \
+     breve oración."
+]);
 
 const locCrypt = ctrl.places.crea(
 	"Cripta",
@@ -392,11 +415,27 @@ const locCrypt = ctrl.places.crea(
 	 de que estás atrapado. }\
 	 Este lugar es más parecido a una cueva que a una típica cripta \
 	 bajo la iglesia. En su centro, puedes ver \
-	 una gran ${figura, ex figura} que preside el subterráneo. \
+	 una gran ${figura, ex figura} más allá de una ${columna, ex columna}, \
+	 que preside el subterráneo. El suelo está alfombrado \
+	 de ${piedras, ex piedras} de diferentes tamaños. \
+	 Las ${paredes, ex paredes } exhudan humedad, a veces esta corre \
+	 en forma de pequeño rastro hasta el suelo. \
 	 Unas ${escaleras, ex escaleras} permiten ascender al nivel del suelo. \
 	 A los lados, puedes ver varios ${sepulcros, ex sepulcros}.",
 	function() {
 	    this.pic = "res/crypt.jpg";
+	    this.sceneryHidingBar = [ objColumnCrypt, objStonesCrypt, objWallsCrypt ];
+	    this.doEachTurn = function() {
+	        ctrl.print( "<i>" + MsgsAtmosphere.nextMsg() + "</i>" );
+
+	        if ( ctrl.getTurns() % 3 == 0 ) {
+	            player.say( "Oh Dios mío... Oh Dios mío..." );
+	        }
+        };
+
+        objBar.moveTo(
+                this.sceneryHidingBar[
+                    ctrl.rnd( 0, this.sceneryHidingBar.length ) ] );
 	}
 );
 
@@ -468,6 +507,7 @@ const objTombs = ctrl.creaObj(
     Ent.Scenery,
     function() {
         this.prePush = function() {
+            objBar.timesUsed += 1;
             return "Haces palanca hasta poder ver un resquicio de \
                     unos huesos humanos. Vuelves a empujar la tapa. \
                     Nada útil aquí.";
@@ -476,11 +516,19 @@ const objTombs = ctrl.creaObj(
         this.preEnter = function() {
             let toret = "Pero... ¿cómo?";
 
+            objBar.timesUsed += 1;
+            
             if ( objStatue.isClean
               && objSymbols.getTimesExamined() > 0
-              && objBar.timesUsed > 0 )
+              && ctrl.isPresent( objBar ) )
             {
-                toret = ctrl.goto( locMititzSurroundings );
+                locCrypt.setExit( "abajo", locUndergroundCorridor );
+                locCrypt.desc += "</p><p>Al levantar la losa, has dejado \
+                                   a la vista un hueco suficiente ancho \
+                                   como para poder ${bajar, abajo}.";
+                toret = "La losa revela un hueco, oscuro, estrecho, pero... \
+                         ¡por el que podrías ${bajar, bajar}!";
+                ctrl.places.doDesc();
             }
 
             return toret;
@@ -488,27 +536,57 @@ const objTombs = ctrl.creaObj(
     }
 );
 
-const objStairs = ctrl.creaObj(
+const objStairsCrypt = ctrl.creaObj(
     "escalera",
     [ "escaleras" ],
     "Una escalera pétrea que asciende a la iglesia, \
      arrancando tras los ${sepulcros, ex sepulcros}.",
      locCrypt,
      Ent.Scenery,
-     function() {
-        this.preExamine = function() {
-            let toret = this.desc;
-
-            if ( ctrl.places.limbo.has( objBar ) ) {
-                objBar.moveTo( this.owner );
-                ctrl.places.doDesc();
-                ctrl.print( "Viste algo tras ellas, en la parte más oscura." );
-            }
-
-            return toret;
-        };
-     }
 );
+
+const objColumnCrypt = ctrl.creaObj(
+    "columna",
+    [ "soporte" ],
+    "Parte de un antiguo arco que se ha derrumbado, dejando algunos \
+     ${cascotes, ex piedras} en el suelo.",
+    locCrypt,
+    Ent.Scenery
+);
+
+const objStonesCrypt = ctrl.creaObj(
+    "piedras",
+    [ "cascotes", "piedra" ],
+    "Todo el suelo está sembrado de piedras de diversos tamaños. \
+     Algunos probablemente pertenecen a un antiguo arco, \
+     del que solo ha sobrevivido una ${columna, ex columna}.",
+    locCrypt,
+    Ent.Scenery
+);
+
+const objWallsCrypt = ctrl.creaObj(
+    "paredes",
+    [ "pared", "bloques", "bloque" ],
+    "Las paredes están formadas por grandes bloques pétreos perfectamente \
+     alineados. Solo el tiempo transcurrido ha hecho mella en ellas.",
+    locCrypt,
+    Ent.Scenery
+);
+
+objColumnCrypt.preExamine =
+objStonesCrypt.preExamine =
+objWallsCrypt.preExamine = function() {
+    let toret = this.desc;
+
+    if ( this.has( objBar ) ) {
+        objBar.moveTo( this.owner );
+        ctrl.places.doDesc();
+        ctrl.print( "En tu búsqueda, has encontrado algo, \
+                     oculto hasta ahora por la oscuridad." );
+    }
+
+    return toret;
+};
 
 const objBar = ctrl.creaObj(
     "palanca",
@@ -527,8 +605,6 @@ const objBar = ctrl.creaObj(
                 if ( this.timesUsed <= 2 ) {
                     let delim = "";
                     toret += "</p><p>Podrías intentar abrir: ";
-
-                    this.timesUsed += 1;
 
                     for(let i = 0; i < objSymbols.tombs.length; ++i) {
                         toret += delim;
@@ -584,9 +660,40 @@ const objStatue = ctrl.creaObj(
     }
 );
 
+const locUndergroundCorridor = ctrl.places.crea(
+    "pasadizo",
+    [ "subterraneo", "corredor" ],
+    "^{Sin pensártelo dos veces, te arrojaste \
+     a la negrura de aquel ${hueco, arriba}, \
+     temiendo por tu vida. }Esto es algún tipo de pasadizo, \
+     que adivinas que forma parte de algún tipo de ruta de ${escape, s}.",
+    function() {
+        this.pic = "res/underground_corridor.jpg";
+        this.preLook = function() {
+            let toret = this.desc;
+
+            if ( this.getTimesExamined() == 0 ) {
+                ctrl.print( "Trastabillas, frenético, golpeándote \
+                             incluso contra las paredes." );
+            }
+
+            return toret;
+        };
+        this.preGo = function() {
+            if ( parser.sentence.term1 == "sur" ) {
+                ctrl.goto( locMititzSurroundings );
+                return ctrl.print( "Trastabillaste por el pasadizo hasta \
+                                    salir por entre la maleza..." );
+            }
+            
+            return ctrl.print( "¡${Huir, s}! ¡Tienes que huir!" );
+        };
+    }
+);
+
 const locInsideChurch = ctrl.places.crea(
 	"Interior de la iglesia",
-	[ "interior de la iglesia" ],
+	[ "iglesia" ],
 	"^{Las mujeres te empujan hacia el altar... }\
 	 La iglesia realmente es muy pequeña. \
 	 Unas tres filas de ${bancos, ex bancos} cortos se sitúan \
@@ -760,7 +867,7 @@ const pnjStalker = ctrl.personas.crea(
 const player = ctrl.personas.crea(
 	"Gabriel",
 	[ "jugador", "player" ],
-	"Vendedor a puerta fría, recorriendo las ciudades \
+	"Gabriel, vendedor a puerta fría, recorriendo las ciudades \
 	 y pueblos para ganar clientes.",
 	locRoadPre
 );

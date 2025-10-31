@@ -270,7 +270,18 @@ const locRoad = ctrl.places.crea(
         this.creaScenery(
             "coche",
             [ "buga", "automovil" ],
-            "Inútil desde que se paró entre estertores." );
+            "Inútil desde que se paró entre estertores. \
+             Es en el ${maletero, ex maletero} donde llevas la mercancía." );
+
+        this.creaScenery (
+            "maletero",
+            [],
+            "Lo abres para contemplarlas. ¡Todo ese conocimiento! \
+             Las enciclopedias históricas sin vender todavía \
+             están ordenadamente colocadas en el maletero. \
+             ¡Baratas y con varios DVD de regalo! \
+             Es una obra impresionante, la habrás consultado miles \
+             de veces." );
 	}
 );
 

@@ -50,6 +50,47 @@ const locMititzSurroundings = ctrl.places.crea(
             return "No es posible.";
         };
 
+        const objFinal = ctrl.creaObj(
+            "final",
+            [],
+            "El final se acerca. Es el fin",
+            this,
+            Ent.Scenery,
+            function() {
+                this.preExamine = function() {
+                    ctrl.endGame( "Corres, corres sin mirar atrás. \
+                                   Huyes tan rápido como puedes, \
+                                   intentando escapar de esta locura.",
+                                   "res/road.jpg" );
+                };
+            }
+        );
+            
+        this.preLook = function() {
+            let toret = this.desc;
+
+            if ( objBar.timesUsed > 0 ) {
+                this.preGo = function() {
+                    return "Solo quieres ${huir, ex final}, huir...";
+                };
+                
+                this.doEachTurn = function() {
+                    ctrl.print( "Sientes la necesidad de correr... \
+                                ¡${huir, ex final}!, debes huir..." );
+                };
+
+                ctrl.print( "Tras descubrir un pasadizo en la tumba, \
+                             te lanzaste a correr sin freno, atravesando \
+                             el bosque y llegando, de nuevo, \
+                             a la carretera." );
+                
+                ctrl.print( "Corres, y corres, tropezando cada pocas \
+                             zancadas, ¡debes ${huir, ex final}!" );
+            }
+
+            return toret;
+        };
+
         this.creaScenery(
             "bosque",
             [ "arboles" ],
@@ -351,7 +392,7 @@ const locCrypt = ctrl.places.crea(
 const objSymbols = ctrl.creaObj(
     "Símbolos",
     [ "simbolos", "simbolo", "inscripcion", "inscripciones" ],
-    "Hay varias tumbas con inscripiones bajo ellas: ",
+    "Varias tumbas con variados símbolos.",
     locCrypt,
     Ent.Scenery,
     function() {
@@ -359,12 +400,12 @@ const objSymbols = ctrl.creaObj(
             "Petrus", "Fideus", "Paulus", 
             "Pompeius", "Salustius", "Iulius" ];
         this.symbols = [
-            "Un cuervo atravesado por una flecha.",
-            "Un puño con un rayo en su interior.",
-            "Un toro atravesado por una espada.",
-            "Una cabra sobre una media luna.",
-            "Tres estrellas bajo una luna llena.",
-            "Una espiga de trigo cruzada con una guadaña." ];
+            "un cuervo atravesado por una flecha",
+            "un puño blandiendo una espada",
+            "un toro atravesado por una espada",
+            "una cabra sobre una media luna",
+            "tres estrellas bajo una luna llena",
+            "una espiga de trigo cruzada con una guadaña" ];
 
         this.shuffle = function()
         {
@@ -386,15 +427,20 @@ const objSymbols = ctrl.creaObj(
 
         this.shuffle();
 
-        this.preLook = function() {
-            let delim = "";
-            let toret = this.desc;
+        this.preExamine = function() {
+            let toret = this.desc + ".";
             
-            for(let i = 0; i < this.tombs.length; ++i) {
-                toret += delim;
-                toret += "la de " + this.tombs[ i ]
-                            + ", con un símbolo de " + this.symbols[ i ];
-                delim = "; ";
+            if ( objStatue.isClean ) {
+                let delim = "";
+                
+                toret += " con inscripiones bajo ellas: ";
+                
+                for(let i = 0; i < this.tombs.length; ++i) {
+                    toret += delim;
+                    toret += "la de " + this.tombs[ i ]
+                                + ", con un símbolo de " + this.symbols[ i ];
+                    delim = "; ";
+                }
             }
 
             return toret;
@@ -408,7 +454,27 @@ const objTombs = ctrl.creaObj(
     "Varios sepulcros se encuentran a ambos lados. \
      Hay ${inscripciones y símbolos, ex simbolos} en ellos.",
     locCrypt,
-    Ent.Scenery
+    Ent.Scenery,
+    function() {
+        this.prePush = function() {
+            return "Haces palanca hasta poder ver un resquicio de \
+                    unos huesos humanos. Vuelves a empujar la tapa. \
+                    Nada útil aquí.";
+        };
+
+        this.preEnter = function() {
+            let toret = "Pero... ¿cómo?";
+
+            if ( objStatue.isClean
+              && objSymbols.getTimesExamined() > 0
+              && objBar.timesUsed > 0 )
+            {
+                toret = ctrl.goto( locMititzSurroundings );
+            }
+
+            return toret;
+        }
+    }
 );
 
 const objStairs = ctrl.creaObj(
@@ -417,7 +483,73 @@ const objStairs = ctrl.creaObj(
     "Una escalera pétrea que asciende a la iglesia, \
      arrancando tras los ${sepulcros, ex sepulcros}.",
      locCrypt,
-     Ent.Scenery
+     Ent.Scenery,
+     function() {
+        this.preExamine = function() {
+            let toret = this.desc;
+
+            if ( ctrl.places.limbo.has( objBar ) ) {
+                objBar.moveTo( this.owner );
+                ctrl.places.doDesc();
+                ctrl.print( "Viste algo tras ellas, en la parte más oscura." );
+            }
+
+            return toret;
+        };
+     }
+);
+
+const objBar = ctrl.creaObj(
+    "palanca",
+    [ "barra" ],
+    "Una palanca de hierro macizo.",
+    ctrl.places.limbo,
+    Ent.Portable,
+    function() {
+        this.timesUsed = 0;
+        this.preExamine = function() {
+            let toret = this.desc;
+
+            if ( objStatue.isClean
+              && objSymbols.getTimesExamined() > 0 )
+            {
+                if ( this.timesUsed <= 2 ) {
+                    let delim = "";
+                    toret += "</p><p>Podrías intentar abrir: ";
+
+                    this.timesUsed += 1;
+
+                    for(let i = 0; i < objSymbols.tombs.length; ++i) {
+                        toret += delim;
+                        toret += "la tumba de ${" + objSymbols.tombs[ i ];
+                        
+                        if ( i == objSymbols.escapeTomb ) {
+                            toret += ", entra en tumbas";
+                        } else {
+                            toret += ", empuja tumbas";
+                        }
+                        
+                        toret += "}";
+                        delim = ", ";
+                    }
+
+                    toret += ".";
+                } else {
+                    ctrl.endGame( "Sin previo aviso, la trampilla se abre, \
+                                   y por ella desciende un hombre... \
+                                   un engendro... una bestia... \
+                                   Retrocedes, balbucenado... \
+                                   Tropiezas. Trastabillas. Caes... \
+                                   Todo se nubla, pero entre la bruma \
+                                   de tu mente puedes ver como se acerca... \
+                                   Es tu final. Es el fin.",
+                        "res/devil.png" );
+                }
+            }
+
+            return toret;
+        };
+    }
 );
 
 const objStatue = ctrl.creaObj(
@@ -426,7 +558,19 @@ const objStatue = ctrl.creaObj(
     "Está cubierta de telarañas, musgo, y tierra. \
      No reconoces la representación que intenta realizar.",
     locCrypt,
-    Ent.Scenery
+    Ent.Scenery,
+    function () {
+        this.isClean = false;
+
+        this.preSearch = function() {
+            this.isClean = true;
+            objCoat.setWorn( false );
+            objCoat.desc = "Ahora está toda sucia y arrugada.";
+            this.desc = "MITRA: un guerrero blandiendo una espada.";
+            return "Limpias la estatua, descubriendo a un guerrero \
+                    con una espada. En su base indica: \"MITRA\". ";
+        };
+    }
 );
 
 const locInsideChurch = ctrl.places.crea(
@@ -620,7 +764,20 @@ const objCoat = ctrl.creaObj(
         this.preDisrobe =
         this.preDrop = function() {
             player.say( "En realidad, no quiero quitarme la gabardina." );
-        }
+        };
+
+        this.preExamine = function() {
+            let toret = this.desc;
+
+            if ( objStatue.getTimesExamined() > 0
+              && !( objStatue.isClean ) )
+            {
+                toret += " Podrías usarla para ${limpiar, busca en estatua} \
+                            la estatua.";
+            }
+            
+            return toret;
+        };
     }
 );
 
@@ -662,6 +819,5 @@ ctrl.ini = function()
 	objCoat.setClothing();
 	objSuit.setWorn();
 	objCoat.setWorn();
-	//ctrl.places.setStart( locRoadPre );
-	ctrl.places.setStart( locForestClear );
+	ctrl.places.setStart( locRoadPre );
 }

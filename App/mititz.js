@@ -58,10 +58,12 @@ const locMititzSurroundings = ctrl.places.crea(
             Ent.Scenery,
             function() {
                 this.preExamine = function() {
-                    ctrl.endGame( "Corres, corres sin mirar atrás. \
-                                   Huyes tan rápido como puedes, \
-                                   intentando escapar de esta locura.",
-                                   "res/road.jpg" );
+                    endGame( "Corres, corres sin mirar atrás. \
+                               Huyes tan rápido como puedes, \
+                               intentando escapar de esta locura.</p>\
+                               <p>Si lo logras, contarás todo lo \
+                               que has visto... será su fin.",
+                               "res/road.jpg" );
                 };
             }
         );
@@ -622,15 +624,15 @@ const objBar = ctrl.creaObj(
 
                     toret += ".";
                 } else {
-                    ctrl.endGame( "Sin previo aviso, la trampilla se abre, \
-                                   y por ella desciende un hombre... \
-                                   un engendro... una bestia... \
-                                   Retrocedes, balbucenado... \
-                                   Tropiezas. Trastabillas. Caes... \
-                                   Todo se nubla, pero entre la bruma \
-                                   de tu mente puedes ver como se acerca... \
-                                   Es tu final. Es el fin.",
-                        "res/devil.png" );
+                    endGame( "Sin previo aviso, la trampilla se abre, \
+                               y por ella desciende un hombre... \
+                               un engendro... una bestia... \
+                               Retrocedes, balbucenado... \
+                               Tropiezas. Trastabillas. Caes... \
+                               Todo se nubla, pero entre la bruma \
+                               de tu mente puedes ver como se acerca... \
+                               Es tu final. Es el fin.",
+                            "res/devil.png" );
                 }
             }
 
@@ -683,7 +685,9 @@ const locUndergroundCorridor = ctrl.places.crea(
             if ( parser.sentence.term1 == "sur" ) {
                 ctrl.goto( locMititzSurroundings );
                 return ctrl.print( "Trastabillaste por el pasadizo hasta \
-                                    salir por entre la maleza..." );
+                                    salir por entre la maleza,...\
+                                    rasgándote la ropa, y haciéndote \
+                                    algunas heridas en la cara y manos" );
             }
             
             return ctrl.print( "¡${Huir, s}! ¡Tienes que huir!" );
@@ -695,7 +699,7 @@ const locInsideChurch = ctrl.places.crea(
 	"Interior de la iglesia",
 	[ "iglesia" ],
 	"^{Las mujeres te empujan hacia el altar... }\
-	 La iglesia realmente es muy pequeña. \
+	 La iglesia es muy alta, pero también bastante pequeña. \
 	 Unas tres filas de ${bancos, ex bancos} cortos se sitúan \
 	 a ambos lados del ${pasillo, ex pasillo} \
 	 central hacia el ${altar, ex altar}.",
@@ -847,7 +851,6 @@ const locVillageSquare = ctrl.places.crea(
 
 
 // ================================================================= Characters
-
 const pnjStalker = ctrl.personas.crea(
     "mujer",
     [ "acosadora" ],
@@ -913,6 +916,27 @@ const objSuit = ctrl.creaObj(
         }
     }
 );
+
+
+// =================================================================== End game
+let htmlRestartEnding = "<p align='right'>\
+                         <a href='javascript: location.reload();'>\
+                         <i>Comenzar de nuevo</i></a>.<br/>";
+/*                         <i><a href='#' onClick=\"javascript: \
+                         document.getElementById('pAmenity').\
+                         style.display='block'; return false\">\
+                         Ver curiosidades</a>.</i></p>\
+                         <p id='pAmenity' align='right' style='display: none'>"
+                         + amusing() + "</p>";
+*/
+                         
+function endGame(msg, pic)
+{
+    const dvCmds = ctrl.getHtmlPart( "dvCmds" );
+
+    dvCmds.style.display = "none";
+    ctrl.endGame( msg + htmlRestartEnding, pic );
+}
 
 
 // ======================================================================= Boot

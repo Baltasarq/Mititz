@@ -25,16 +25,14 @@ const locMititzSurroundings = ctrl.places.crea(
 	 el ${bosque, ex bosque} de uno de sus márgenes. \
 	 El desvío está señalizado mediante un ${cartel, ex cartel}.",
 	function() {
-	    this.setExit( "este", locLongRoadSegment );
         this.pic = "res/road-detour.jpg";
+        this.objs.push( objFinal );
+        this.setExit( "este", locLongRoadSegment );
 
-        const objDesvio = ctrl.creaObj(
-            "Desvío",
-            [ "desvio", "carreterita" ],
-            "Se ${interna, n} en el bosque de uno de sus márgenes.",
-            this,
-            Ent.Scenery,
-        );
+        this.creaScenery( "Desvío",
+                [ "desvio", "carreterita" ],
+                "Se ${interna, n} en el bosque  \
+                    desde uno de sus márgenes." );
 
         this.preGo = function() {
             if ( parser.sentence.term1 == "norte" ) {
@@ -50,41 +48,23 @@ const locMititzSurroundings = ctrl.places.crea(
             return "No es posible.";
         };
 
-        const objFinal = ctrl.creaObj(
-            "final",
-            [],
-            "El final se acerca. Es el fin",
-            this,
-            Ent.Scenery,
-            function() {
-                this.preExamine = function() {
-                    endGame( "Corres, corres sin mirar atrás. \
-                               Huyes tan rápido como puedes, \
-                               intentando escapar de esta locura.</p>\
-                               <p>Si lo logras, contarás todo lo \
-                               que has visto... será su fin.",
-                               "res/road.jpg" );
-                };
-            }
-        );
-            
         this.preLook = function() {
             let toret = this.desc;
 
             if ( objBar.timesUsed > 0 ) {
                 this.preGo = function() {
-                    return "Solo quieres ${huir, ex final}, huir...";
+                    return "Solo quieres ${huir, ex eselfinal}, huir...";
                 };
-                
+
                 this.doEachTurn = function() {
                     ctrl.print( "Sientes la necesidad de correr... \
-                                ¡${huir, ex final}!, debes huir..." );
+                                ¡${huir, ex eselfinal}!, debes huir..." );
                 };
 
                 ctrl.print( "Frenético, quieres lanzarte a correr sin freno..." );
-                
+
                 ctrl.print( "Y corres, y corres, tropezando cada pocas \
-                             zancadas, ¡debes ${huir, ex final}!" );
+                             zancadas, ¡debes ${huir, ex eselfinal}!" );
             }
 
             return toret;
@@ -109,6 +89,36 @@ const locMititzSurroundings = ctrl.places.crea(
             "Se lee \"Mititz\" en su interior."
         );
 	}
+);
+
+const objFinal = ctrl.creaObj(
+    "eselfinal",
+    [],
+    "El final se acerca. Es el fin",
+    locMititzSurroundings,
+    Ent.Scenery,
+    function() {
+        this.preExamine = function() {
+            let msgEnd = "Corres, corres sin mirar atrás. \
+                        Huyes tan rápido como puedes, \
+                        intentando escapar de esta locura.";
+
+            if ( ctrl.isPresent( objNotebook ) ) {
+                msgEnd += "</p><p>Si lo logras, contarás todo lo \
+                           que has visto... será su fin. \
+                           Tomas la libreta y la agarras con fuerza. ";
+
+                if ( objNotebook.isOpen() ) {
+                    msgEnd += "¡Tienes todas las pruebas que necesitas!";
+                } else {
+                    msgEnd += "Aunque no sabes lo que contiene, \
+                               sabes que es importante.";
+                }
+            }
+
+            endGame( msgEnd, "res/road.jpg" );
+        };
+    }
 );
 
 const locVillageStreet = ctrl.places.crea(
@@ -272,15 +282,24 @@ const locRoad = ctrl.places.crea(
             "Inútil desde que se paró entre estertores. \
              Es en el ${maletero, ex maletero} donde llevas la mercancía." );
 
-        this.creaScenery (
+        ctrl.creaObj(
             "maletero",
             [],
             "Lo abres para contemplarlas. ¡Todo ese conocimiento! \
-             Las enciclopedias históricas sin vender todavía \
+             Las <a href=\"http://www.wikipedia.es/\" target=\"_blank\">\
+             enciclopedias</a> todavía sin vender todavía \
              están ordenadamente colocadas en el maletero. \
-             ¡Baratas y con varios DVD de regalo! \
+             ¡Baratas y con varios DVD de regal o! \
              Es una obra impresionante, la habrás consultado miles \
-             de veces." );
+             de veces.",
+            this,
+            Ent.Scenery,
+            function() {
+                this.preExamine = function() {
+                    ctrl.achievements.achieved( "erudito" );
+                    return this.desc;
+                }
+            });
 	}
 );
 
@@ -323,7 +342,7 @@ const locForestClear = ctrl.places.crea(
              con detenimiento, pese a no entender la lengua \
              de las voces de la composición."
         );
-        
+
         this.preLook = function() {
             const TORET = this.desc;
 
@@ -334,7 +353,7 @@ const locForestClear = ctrl.places.crea(
                     ctrl.print( "${Alguien, ex acosadora} se acerca..." );
                 });
             }
-            
+
             return TORET;
         };
 	}
@@ -357,6 +376,7 @@ const locCapture = ctrl.places.crea(
                 this.moveTo( ctrl.places.limbo );
                 return ctrl.goto( locPathToVillage );
             };
+
             player.say( "Yo... lo siento... no pretendía..." );
             ctrl.print( "La mujer emite un grito obsceno, gutural, \
                          que hacen que las que bailaban en el corro \
@@ -374,15 +394,38 @@ const locPathToVillage = ctrl.places.crea(
        en el gimnasio han dado sus frutos. Sin embargo, \
        las horripilantes mujeres en derredor tuyo, sin dejar de proferir \
        esos tétricos gritos, te llevan en volandas.</p><p>}\
-       Aterrorizado, eres llevado a empellones por el camino, \
+       Aterrorizado, estos ${monstruos, ex mujeres} enloquecidos \
+       te llevan a empellones por el camino, \
        hacia un ${pueblo, o} en lontananza.",
     function() {
         this.pic = "res/path.jpg";
         this.setExit( "oeste", locVillageStreet );
-        this.preExamine = function() {
-            player.desc = "Gabriel, vendedor ansioso, frenético, \
-                           y muerto de miedo.";
+        this.setExit( "norte", locWell );
+        this.postLook = function() {
+            player.setAfraid();
         };
+
+        ctrl.personas.crea( "mujeres",
+            [ "mujer", "monstruo", "monstruos", "mujeres" ],
+            "Están enloquecidas... ¡parecen monstruos!",
+            this,
+            function() {
+                this.preTalk = function() {
+                    this.say( "¡¡GGhhjja!!" );
+                    ctrl.print( "No atienden a razones, \
+                                parecen en trance. \
+                                Una de ellas trastabilla en su locura, \
+                                ${perdiendo el equilibrio, empuja mujeres}." );
+                };
+                this.prePush = function() {
+                    return "Aprovechas la ocasión para saltar, cargando \
+                            con todo tu peso sobre ellas, especialmente \
+                            en la que tropezó.</p><p>¡Con fuertes sacudidas \
+                            te deshaces de sus manos enloquecidas, \
+                            y tratas de ${correr, n}, con la vista puesta \
+                            en atravesar unos arbustos!";
+                };
+            });
     }
 );
 
@@ -408,6 +451,13 @@ const MsgsAtmosphere = new MsgList([
      breve oración."
 ]);
 
+
+function setAtmosphere()
+{
+    ctrl.print( "<i>" + MsgsAtmosphere.nextMsg() + "</i>" );
+}
+
+
 const locCrypt = ctrl.places.crea(
 	"Cripta",
 	[ "cripta" ],
@@ -428,7 +478,7 @@ const locCrypt = ctrl.places.crea(
 	    this.pic = "res/crypt.jpg";
 	    this.sceneryHidingBar = [ objColumnCrypt, objStonesCrypt, objWallsCrypt ];
 	    this.doEachTurn = function() {
-	        ctrl.print( "<i>" + MsgsAtmosphere.nextMsg() + "</i>" );
+	        setAtmosphere();
 
 	        if ( ctrl.getTurns() % 3 == 0 ) {
 	            player.say( "Oh Dios mío... Oh Dios mío..." );
@@ -444,12 +494,12 @@ const locCrypt = ctrl.places.crea(
 const objSymbols = ctrl.creaObj(
     "Símbolos",
     [ "simbolos", "simbolo", "inscripcion", "inscripciones" ],
-    "Varias tumbas con variados símbolos.",
+    "Varias tumbas con diversos símbolos",
     locCrypt,
     Ent.Scenery,
     function() {
         this.tombs = [
-            "Petrus", "Fideus", "Paulus", 
+            "Petrus", "Fideus", "Paulus",
             "Pompeius", "Salustius", "Iulius" ];
         this.symbols = [
             "un cuervo atravesado por una flecha",
@@ -480,13 +530,13 @@ const objSymbols = ctrl.creaObj(
         this.shuffle();
 
         this.preExamine = function() {
-            let toret = this.desc + ".";
-            
+            let toret = this.desc;
+
             if ( objStatue.isClean ) {
                 let delim = "";
-                
-                toret += " con inscripiones bajo ellas: ";
-                
+
+                toret += ", y también con inscripiones bajo ellas: ";
+
                 for(let i = 0; i < this.tombs.length; ++i) {
                     toret += delim;
                     toret += "la de " + this.tombs[ i ]
@@ -495,7 +545,7 @@ const objSymbols = ctrl.creaObj(
                 }
             }
 
-            return toret;
+            return toret + ".";
         }
     }
 );
@@ -519,7 +569,7 @@ const objTombs = ctrl.creaObj(
             let toret = "Pero... ¿cómo?";
 
             objBar.timesUsed += 1;
-            
+
             if ( objStatue.isClean
               && objSymbols.getTimesExamined() > 0
               && ctrl.isPresent( objBar ) )
@@ -530,6 +580,7 @@ const objTombs = ctrl.creaObj(
                                    como para poder ${bajar, abajo}.";
                 toret = "La losa revela un hueco, oscuro, estrecho, pero... \
                          ¡por el que podrías ${bajar, bajar}!";
+                ctrl.achievements.achieved( "profanador" );
                 ctrl.places.doDesc();
             }
 
@@ -611,13 +662,13 @@ const objBar = ctrl.creaObj(
                     for(let i = 0; i < objSymbols.tombs.length; ++i) {
                         toret += delim;
                         toret += "la tumba de ${" + objSymbols.tombs[ i ];
-                        
+
                         if ( i == objSymbols.escapeTomb ) {
                             toret += ", entra en tumbas";
                         } else {
                             toret += ", empuja tumbas";
                         }
-                        
+
                         toret += "}";
                         delim = ", ";
                     }
@@ -656,6 +707,7 @@ const objStatue = ctrl.creaObj(
             objCoat.setWorn( false );
             objCoat.desc = "Ahora está toda sucia y arrugada.";
             this.desc = "MITRA: un guerrero blandiendo una espada.";
+            ctrl.achievements.achieved( "mitraico" );
             return "Limpias la estatua, descubriendo a un guerrero \
                     con una espada. En su base indica: \"MITRA\". ";
         };
@@ -689,7 +741,7 @@ const locUndergroundCorridor = ctrl.places.crea(
                                     rasgándote la ropa, y haciéndote \
                                     algunas heridas en la cara y manos" );
             }
-            
+
             return ctrl.print( "¡${Huir, s}! ¡Tienes que huir!" );
         };
     }
@@ -846,8 +898,518 @@ const locVillageSquare = ctrl.places.crea(
             "La ${fuente, ex fuente} y la ${iglesia, ex iglesia} \
              son sus principales reclamos."
         );
-	}
-);
+	});
+
+
+const locWell = ctrl.places.crea(
+	"Pozo",
+	[ "agujero" ],
+	"^{¡De repente, el suelo cede bajo tus pies! \
+	  Caes, caes con los pies por delante, y... aterrizas con tu espalda \
+	  y trasero en un montón de lodo blando, con un pequeño golpe acuoso. }\
+	  Envuelto en la completa oscuridad, solo un leve resplandor \
+	  se adivina por ${encima, ex boca}, cuando levantas tu cabeza. \
+	  En derredor, solo puedes adivinar los ${muros, ex muros} de tierra húmeda \
+	  que parten desde tu posición, aunque no ves dónde vuelven a cerrarse.",
+	function() {
+        this.pic = "res/well.jpg";
+	    this.setExit( "abajo", locFirstPassage );
+	    this.creaScenery(
+            "boca",
+            [ "arriba", "encima" ],
+            "Solo puedes ver algo de luz, y te parece \
+             que alguna sombra moviéndose alrededor de lo que \
+             adivinas es un agujero." );
+
+        this.creaScenery(
+            "muro",
+            [ "muros", "pared", "paredes" ],
+            "Desde tu espalda notas paredes de lodo, barro y tierra húmeda, \
+             que conforman lo que parece algún tipo de pozo. Comienzas a \
+             palparlos a medida que te ${levantas, abajo}, intentando adivinar \
+             el tamaño de tu encierro." );
+
+        this.doEachTurn = function() {
+            if ( this.getTimesExamined() == 1 ) {
+                ctrl.places.doDesc();
+            }
+        };
+	});
+
+
+const locClassroom = ctrl.places.crea(
+    "Aula",
+    [ "aula", "clase", "estancia", "sala" ],
+    "Una amplia estancia presenta varios ${pupitres, ex pupitres} \
+     en ordenadas filas, frente a una ${pizarra, ex pizarra}, \
+     y unos ${estantes, ex estantes} bastante toscos. \
+     Solo puedes ${volver, n} por donde viniste.",
+    function() {
+        this.pic = "res/classroom.jpg";
+        this.creaScenery( "mesas",
+            [ "mesa", "pupitre", "pupitres" ],
+            "Hasta nueve pupitres se sitúan frente \
+             a una ${pizarra, ex pizarra} \
+             y unos pequeños ${estantes, ex estantes}." );
+
+        this.creaScenery( "pizarra",
+            [ "pizarra", "palestra" ],
+            "Aparece una estrella de siete puntas dibujada en ella. \
+             por algún motivo, se te antoja siniestra así dibujada, \
+             con otros símbolos indescifrables (¿runas?) en cada una \
+             de sus puntas." );
+
+        this.doEachTurn = setAtmosphere;
+    });
+
+
+const objBroom = ctrl.creaObj(
+    "escoba",
+    [],
+    "Pues sí, lo que parece: una escoba.",
+    locClassroom,
+    Ent.Portable,
+    function() {
+        this.preExamine = function() {
+            const loc = ctrl.places.getCurrentLoc();
+            let toret = this.desc;
+
+            if ( loc == locLibrary
+              && locLibrary.has( objRings ) )
+            {
+                toret += " Se te ocurre que podrías intentar \
+                            ${meter, mete escoba en argollas} \
+                            la escoba en las argollas.";
+            }
+
+            return toret;
+        };
+
+        this.preDrop = function() {
+            if ( parser.sentence.obj2 == objRings ) {
+                let toret = "Insertas el mango de la escoba \
+                                en los aros. No sucede nada.";
+
+                this.moveTo( ctrl.places.limbo );
+
+                objRings.desc += " La escoba está insertada \
+                                    en los aros, por su mango. \
+                                    Solo puedes ${golpearla, \
+                                    golpea aros}, de pura \
+                                    frustración.";
+
+                ctrl.personas.getPlayer().say( "¿Y qué esperabas, \
+                                            que se abriese \
+                                            un pasadizo secreto?" );
+                return toret;
+            }
+
+            return dropAction.exe( parser.sentence );
+        };
+    });
+
+
+const objShelves = ctrl.creaObj(
+    "Estantes",
+    [ "estantes", "estante", "estanteria", "baldas", "balda" ],
+    "Ordenadamente colocadas, varias pequeñas ${libretas, ex libretas} \
+     forradas en cuero, se aprietan sobre las baldas de madera.",
+    locClassroom,
+    Ent.Scenery,
+    function() {
+        this.preExamine = function() {
+            let toret = this.desc;
+
+            if ( !this.has( objNotebooks ) ) {
+                objNotebooks.moveTo( this.owner );
+            }
+
+            return toret;
+        };
+    });
+
+
+const objNotebooks = ctrl.creaObj(
+    "libretas",
+    [],
+    "Varias libretas, colocadas una junto a la otra. Todas ellas tienen \
+    un pequeño cerrojo que impide abrirlas sin una llave.",
+    ctrl.places.limbo,
+    Ent.Scenery,
+    function() {
+        this.preExamine = function() {
+            let toret = this.desc;
+
+            if ( ctrl.places.limbo.has( objNotebook ) ) {
+                toret += " De entre ellas, \
+                           destaca ${una libreta \
+                           ligeramente más grande, coge libretas}.";
+            }
+
+            return toret;
+        };
+
+        this.preTake = function() {
+            objNotebook.moveTo( ctrl.personas.getPlayer() );
+            ctrl.achievements.achieved( "curioseador" );
+            return "Tomas la libreta en tus manos.";
+        };
+    });
+
+
+const objNotebook = ctrl.creaObj(
+    "libreta",
+    [ "notas", "bloc" ],
+    "Una libreta para tomar notas.",
+    ctrl.places.limbo,
+    Ent.Portable,
+    function() {
+        this.setOpen( false );
+        this.setCloseable();
+
+        this.preExamine = function() {
+            let toret = this.desc;
+
+            if ( this.isOpen() ) {
+                toret +=  this.contents[ this.currentPar ];
+
+                this.nextPar();
+
+                if ( this.currentPar == ( this.contents.length - 1 ) ) {
+                    // Won't move from last pos
+                    this.nextPar = () => {};
+                } else {
+                    toret += "<p>...sigues leyendo.";
+                }
+            } else {
+                toret += " Está ${cerrada, abre libreta}.";
+            }
+
+            return toret;
+        };
+
+        this.preOpen = function() {
+            let toret = "Necesitas una llave para abrirla.";
+
+            if ( ctrl.isPresent( objKey ) ) {
+                this.setOpen();
+                ctrl.achievements.achieved( "explorador" );
+                toret = "¡Lo llave gira! ¡Se ha abierto!";
+            }
+
+            return toret;
+        };
+
+        this.contents = [
+            "<small><p style='text-align:right'>Viernes, 13 de septiembre de 1974</p>\
+            <p style='margin-left: 60px'>No es sino ahora, \
+            tras toda una vida de pecador, \
+            que he encontrado mi destino. Las buenas gentes de Mititz \
+            me han acogido como su pastor, y aprueban con deleite \
+            mis enseñanzas sobre Satanael. El grupo de mujeres \
+            es receptivo y acogedor, tan solo el obispado \
+            podría limitar la edificación de las enseñanzas \
+            en la comunidad, y este es muy lejano.</p>\
+            <p style='margin-left: 60px'>Puede que este sea \
+            el momento y el lugar.</p>\
+            <p style='margin-left: 60px'>Veremos.</p></small>",
+            "<small><p style='text-align:right'>Jueves, 31 de octubre de 1974</p>\
+            <p style='margin-left: 60px'>¡Buena nueva! \
+            Esta semana ha visto el nacimiento \
+            del grupo de catequesis para las nuevas sacerdotisas, \
+            que ayudaran a difundir en la comunidad el mensaje de Satanael. \
+            Hoy, en la noche de <i>Samhain</i>, sucederá la celebración \
+            del pacto luciferino. Este es el momento en el que noto que \
+            mi fin, la naturaleza de mi ser, es por fin cercano.</small></p>",
+            "<small><p style='text-align:right'>\
+            Sábado, 21 de diciembre de 1974</p>\
+            <p style='margin-left: 60px'>Hoy celebraremos el sacramento \
+            luciferino en la noche más larga. \
+            Nuestro culto de brujería conseguirá que Satanael está complacido.\
+            <p style='margin-left: 60px'><i>Hexen und Kraft!</i></p></small>",
+            "<small><p style='text-align:right'>\
+            Miércoles, 30 de abril de 1975</p>\
+            <p style='margin-left: 60px'>La de hoy es la gran noche, \
+            la noche de mis brujas. Walpurgisnacht. \
+            Esta noche bailarán en el <i>Hexentanzplatz</i> \
+            a las afueras del pueblo.</p></small>\
+            <small><p style='margin-left: 60px'>¡Hoy celebraremos \
+            el advenimiento de Satanael!</p>\
+            <p style='margin-left: 60px'>\
+            <i>Hexen, erwacht! Die Walpurgisnacht ruft.</i></p></small>",
+            " El maligno título es: \
+             \"<i>Liber Hexenmeister</i>\"... Es decir, \
+             \"Diario de un maestro de brujería.\"",
+        ];
+
+        this.currentPar = this.contents.length - 1;
+        this.nextPar = () => {
+            objNotebook.currentPar =  ( objNotebook.currentPar + 1 )
+                                                % objNotebook.contents.length;
+        };
+    });
+
+
+const locLibrary = ctrl.places.crea(
+    "Biblioteca",
+    [ "estanteria", "estanterias", "sala" ],
+    "Las ${paredes, ex paredes} están cubiertas \
+     de toscas ${estanterías, ex estantes}, \
+     llenas de ${volúmenes, ex libros} \
+     heterogéneos, aquí amontonados, allá apilados. \
+     La iluminación de esta tosca estancia proviene de unas \
+     ${antorchas, ex antorcha} clavadas en el techo, fuera de tu alcance. \
+     Un ${atril, ex atril} preside el centro de la sala. \
+     Solo se puede ${salir, s} por donde entraste.",
+    function() {
+        this.pic = "res/library.jpg";
+        this.objs.push( objTorches );
+        this.setExitBi( "sur", locSecondPassage );
+
+        ctrl.creaObj( "atril",
+            [ "soporte" ],
+            "Se trata de un soporte de madera trabajada y tallada con... \
+             atemorizantes figuras con alas membranosas. \
+             Sobre él hay un grueso ${libro, ex libro} abierto.",
+            this,
+            Ent.Scenery,
+            function() {
+                this.preExamine = function() {
+                    let toret = this.desc;
+
+                    if ( ctrl.places.limbo.has( objBook ) ) {
+                        objBook.moveTo( this.owner );
+                        ctrl.places.doDesc();
+                    }
+
+                    return toret;
+                };
+            });
+
+        ctrl.creaObj( "paredes",
+            [ "pared", "muros", "muro", "roca" ],
+            "Las paredes están cubiertas \
+             de ${estantes, ex estantes}. \
+             Puedes ver unos ${aros, ex aros} en una de ellas.",
+            this,
+            Ent.Scenery,
+            function() {
+                this.preExamine = function() {
+                    if ( ctrl.places.limbo.has( objRings ) ) {
+                        objRings.moveTo( this.owner );
+                    }
+
+                    return this.desc;
+                }
+            });
+
+        this.creaScenery( "libros",
+            [ "volumenes", "volumenes", ],
+            "Varios volúmenes, agrupados en pilas o en filas, todas ellas \
+             de distinta medida." );
+
+        this.creaScenery( "estantes",
+            [ "estanteria", "estanterias", "estante", "baldas", "balda" ],
+            "Las ${paredes, ex paredes} están llenas de estantes, \
+             soportando múltiples ${volúmenes, ex libros}." );
+
+        this.doEachTurn = setAtmosphere;
+    });
+
+
+const objRings = ctrl.creaObj( "aros",
+    [ "argollas", "argolla", "aro" ],
+    "Dos argollas sobresalen de la pared, \
+        alineadas la una con la otra horizontalmente.",
+    ctrl.places.limbo,
+    Ent.Scenery,
+    function() {
+        this.preAttack = function() {
+            if ( ctrl.places.limbo.has( objBroom ) ) {
+                let toret = "Sin querer, al golpear la escoba, \
+                             el mango ha golpeado a su vez \
+                             la estantería, y una ${caja, coge caja} \
+                             ha caído desde la parte de arriba.";
+
+                objBox.moveTo( this.owner );
+                ctrl.places.doDesc();
+                return toret;
+            }
+
+            return attackAction.exe();
+        };
+    });
+
+
+const objTorches = ctrl.creaObj(
+            "antorcha",
+            [ "antorchas", "tea", "teas" ],
+            "Parece que están a una altura de dos metros y medio.",
+            ctrl.places.limbo,
+            Ent.Scenery );
+
+
+const locFirstPassage = ctrl.places.crea(
+    "Pasaje",
+    [ "tunel", "galeria" ],
+    "^{¡Te hundes en el lodo, y pierdes el agarre a tu alrededor!<br/>\
+       ¡Caes de nuevo!<br>\
+       ¡Intentas agarrarte a algo, pero antes de que puedas hacerlo, \
+       te encuentras de nuevo con el suelo!<br>\
+       Aterrizas sobre el trasero en el duro suelo de un pasaje \
+       excavado en la tierra. }\
+       ${Barro y lodo, ex barro} han caído al suelo de esta galería desde \
+       el ${desgarro, ex agujero} en el techo. \
+       La galería se alarga en la dirección del desgarro, \
+       con muy poca iluminación, pero donde se intuye un agujero semejante \
+       a algún tipo de ${umbral, o}. Intuyes que debe de haber \
+       alguna abertura de algún tipo en sentido contrario, \
+       pero resulta imposible encontrarlo con tan poca luz. \
+       Descubres que esta escasa luz proviene de \
+       unas ${antorchas, ex antorchas} muy altas, cercanas al techo.",
+    function() {
+        this.pic = "res/passage.jpg";
+        this.objs.push( objTorches );
+        this.setExitBi( "oeste", locSecondPassage );
+
+        this.creaScenery(
+            "agujero",
+            [ "desgarro", "pozo" ],
+            "Solo se aprecia un agujero negro irregular, con bordes de \
+             barro que han dejado caer ${terrones acuosos, ex barro} al suelo."
+        );
+
+        this.creaScenery(
+            "barro",
+            [ "terron", "terrones", "lodo" ],
+            "Son desperdicios del ${agujero, ex agujero}, \
+             que han acabado en el suelo."
+        );
+
+        this.preLook = function() {
+            if ( this.getTimesExamined() == 0 ) {
+                ctrl.print( "Te levantas lentamente, sacudiéndote la ropa. \
+                             Especialmente en la parte trasera de tu cuerpo." );
+            }
+        }
+
+        this.doEachTurn = function() {
+            if ( this.getTimesExamined() == 1 ) {
+                ctrl.places.doDesc();
+            }
+
+            setAtmosphere();
+        }
+    });
+
+
+const locSlope = ctrl.places.crea(
+    "Pendiente",
+    [ "pendiente", "rampa", "barro", "suelo" ],
+    "Te colocas de perfil para pasar por la estrecha ranura, \
+     y...<p>¡Caes!</p><p>Has puesto el pie en un suelo resbaladizo, \
+     perdiendo el equilibrio y...</p>\<p>¡Deslizándote por una pendiente! \
+     ¡Intentas ${agarrarte, abajo}, intentar volver hacia arriba!",
+    function() {
+        this.pic = "res/slope.jpg";
+        this.setExit( "abajo", locCrypt );
+    });
+
+
+const locSecondPassage = ctrl.places.crea(
+    "Pasaje",
+    [ "tunel", "galeria" ],
+    "^{Este otro pasaje es muy similar al primero, aunque descubres \
+     que permite el acceso a muchos más lugares. }\
+     El ${umbral a tu espalda, e}, permite volver a la primera galería, \
+     en la que caíste desde el pozo. \
+     Un ${segundo umbral, n}, más pequeño, permite entrar desde un lateral \
+     en, por lo que se puede adivinar, algún tipo de biblioteca. \
+     En el lateral frente a la biblioteca, se abre un ${tercer umbral, s}, \
+     que da a acceso a una gran estancia. Frente a ti, \
+     puedes ver una ${grieta, o}, por la que podrías meterte. \
+     También aquí hay unas ${antorchas, ex antorchas} en las alturas.",
+    function() {
+        this.pic = "res/passage.jpg";
+        this.objs.push( objTorches );
+        this.setExitBi( "este", locFirstPassage );
+        this.setExit( "oeste", locSlope );
+        this.setExitBi( "norte", locLibrary );
+        this.setExitBi( "sur", locClassroom );
+
+        this.creaScenery(
+            "antorcha",
+            [ "antorchas", "tea", "teas" ],
+            "Parece que están a una altura de dos metros y medio."
+        );
+
+        this.doEachTurn = setAtmosphere;
+    });
+
+
+const objBook = ctrl.creaObj( "libro",
+    [ "volumen" ],
+    "Un grueso volumen en alemán, con una pesada \
+     y recia encuadernación. \
+     El título es malignamente evocativo: \"Hexen und schwarze Magie\"... \
+     Es decir, \"Brujas y magia negra.\"",
+    ctrl.places.limbo,
+    Ent.Portable,
+    function() {
+        this.preTake = function() {
+            return "Pesa demasiado... y no me atrae quedarme con \
+                    este libro.";
+        };
+    });
+
+
+const objKey = ctrl.creaObj( "llave",
+    [ "llavecita", "llavecilla" ],
+    "Minúscula.",
+    ctrl.places.limbo,
+    Ent.Portable,
+    function() {
+    });
+
+
+const objBox = ctrl.creaObj( "caja",
+    [ "recipiente", "cierre", "pasador" ],
+    "Una caja tapizada en negro. La tapa muestra una especie de 'y', una i griega, \
+     con un palito más en el centro del ángulo que apunta hacia arriba.",
+    ctrl.places.limbo,
+    Ent.Portable,
+    function() {
+        this.setCloseable();
+        this.setOpen( false );
+
+        this.preExamine = function() {
+            let toret = this.desc;
+
+            if ( !this.isOpen() ) {
+                toret += " No parece ser difícil de ${abrir, abre caja}, \
+                          solo tiene un pequeño cierre con pasador.";
+            }
+
+            return toret;
+        };
+
+        this.preOpen = function() {
+            let toret = "Abres la caja... ";
+
+            if ( !this.isOpen() ) {
+                if ( ctrl.places.limbo.has( objKey ) ) {
+                    objKey.moveTo( ctrl.places.getCurrentLoc() );
+                    ctrl.places.doDesc();
+                    toret = "¡Había una ${llave, coge llave} en su interior! \
+                             Ha caído al suelo.";
+                }
+            } else {
+                toret = "¡Ya estaba abierta!";
+            }
+
+            return toret;
+        }
+    });
 
 
 // ================================================================= Characters
@@ -872,7 +1434,13 @@ const player = ctrl.personas.crea(
 	[ "jugador", "player" ],
 	"Gabriel, vendedor a puerta fría, recorriendo las ciudades \
 	 y pueblos para ganar clientes.",
-	locRoadPre
+	locRoadPre,
+    function() {
+        this.setAfraid = function() {
+            this.desc = "Gabriel, vendedor ansioso, frenético, \
+                           y muerto de miedo.";
+        };
+    }
 );
 
 const objCoat = ctrl.creaObj(
@@ -896,7 +1464,7 @@ const objCoat = ctrl.creaObj(
                 toret += " Podrías usarla para ${limpiar, busca en estatua} \
                             la estatua.";
             }
-            
+
             return toret;
         };
     }
@@ -919,29 +1487,68 @@ const objSuit = ctrl.creaObj(
 
 
 // =================================================================== End game
-let htmlRestartEnding = "<p align='right'>\
+const htmlAmusing = "<small>Mititz es un nombre inventado, \
+                     parecido al de un pueblo alemán \
+                     llamado Mittenwald, cuyo nombre se parece a su vez, \
+                     a un tal Mitten, un pueblo ficticio en el que, \
+                     debido a una maldición, nacen muchas más mujeres \
+                     que hombres. Y esas mujeres son brujas envueltas en \
+                     maleficios, magia negra...</p><p>\
+                     De ahí nació la idea para este relato, de forma que \
+                     el protagonista se ve envuelto en medio de \
+                     algún tipo de misa negra o maleficio, muy vagamente \
+                     basado en el folklore alemán.</p><p>\
+                     Todo lo relatado aquí es ficción, y no tiene \
+                     ninguna relación con la realidad. Espero que te haya \
+                     entretenido y la hayas disfrutado.</small>";
+
+const htmlRestartEnding = "<p style=\"text-align: right\">\
                          <a href='javascript: location.reload();'>\
-                         <i>Comenzar de nuevo</i></a>.<br/>";
-/*                         <i><a href='#' onClick=\"javascript: \
-                         document.getElementById('pAmenity').\
-                         style.display='block'; return false\">\
-                         Ver curiosidades</a>.</i></p>\
-                         <p id='pAmenity' align='right' style='display: none'>"
-                         + amusing() + "</p>";
-*/
-                         
+                         <i>Comenzar de nuevo</i></a>.<br/> \
+                         <details style=\"text-align: right\"> \
+                         <summary><i>Curiosidades</i></summary>"
+                         + htmlAmusing + "</details></p>";
+
+
 function endGame(msg, pic)
 {
     const dvCmds = ctrl.getHtmlPart( "dvCmds" );
 
     dvCmds.style.display = "none";
-    ctrl.endGame( msg + htmlRestartEnding, pic );
+    ctrl.endGame(
+            msg
+            + "<small><p>"
+            + ctrl.achievements.completAsText()
+            + "</p></small>"
+            + htmlRestartEnding,
+            pic );
 }
 
 
 // ======================================================================= Boot
-ctrl.ini = function()
-{
+ctrl.iniAchievements = function() {
+    ctrl.achievements.add(
+                        "erudito",
+                        "Erudito (te regodeaste en \
+                         el concimiento enciclopédico).");
+    ctrl.achievements.add(
+                        "curioseador",
+                        "Curioseador (encontraste la libreta)." );
+    ctrl.achievements.add(
+                        "explorador",
+                        "Explorador (descubriste el culto)." );
+
+    ctrl.achievements.add(
+                        "mitraico",
+                        "Mitraico (limpiaste la estatua)." );
+
+    ctrl.achievements.add(
+                        "profanador",
+                        "Profanador (abriste la tumba)." );
+};
+
+
+ctrl.ini = function() {
 	ctrl.setTitle( "Mititz" );
 	ctrl.setIntro( "<p>Avanzas con los ojos entrecerrados, \
 	                intentando adivinar tras cada curva \
@@ -954,9 +1561,10 @@ ctrl.ini = function()
 	                el largo camino a casa.</p>" );
 	ctrl.setPic( "res/road.jpg" );
 	ctrl.setAuthor( "baltasarq@gmail.com" );
-	ctrl.setVersion( "1.0 20251030" );
+	ctrl.setVersion( "1.1 20260331" );
 	ctrl.personas.changePlayer( player );
 	ctrl.setRndSeed();
+    ctrl.iniAchievements();
 	objSuit.setClothing();
 	objCoat.setClothing();
 	objSuit.setWorn();

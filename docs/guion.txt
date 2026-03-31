@@ -1,0 +1,110 @@
+# Guión
+
+## La llegada del vendedor de enciclopedias a Mititz
+
+Nuestro protagonista llega a Mititz debido al fallo de su coche, internándose en el bosque debido a un reflejo que le llamó la atención.
+
+En un claro del bosque, se encuentra con un grupo de mujeres que, aunque no llega a nombrarse de ninguna manera, son brujas; las brujas de Mititz.
+
+Desde allí, es llevado en volandas por el grupo de brujas por un camino hasta la plaza del pueblo donde se alza la iglesia. Entrando en la iglesia, lo recluyen en una cripta bajo ella.
+
+Entonces, encuentra herramientas, observa una estatua tras limpiarla con su gabardina, que resulta ser de Mitra, y, gracias a su afición enclicopédica-histórica, encuentra una tumba que puede abrir.
+
+Entrando y descendiendo en la tumba, encuentra un pasaje que le lleva de vuelta a la carretera, pudiendo escapar.
+
+Si el protagonista prueba con varias tumbas, finalmente aparece un hombre disfrazado con una cabeza de cabra; no se detalla cómo, pero se afirma que es el fin.
+
+## La extensión de feb./mar. 2026
+
+Esta extensión se plantea como una manera de construir sobre el _lore_ de la historia ya planteada. Mientras la primera versión se planteaba como de final abrupto, de lo que se trata es de completar y redondear la aventura.
+
+Mientras las brujas están llevando al protagonista en volandas, al dejar el claro y pasar al camino, se debe plantear una posibilidad de evasión. Al salir corriendo, pasa por unos gruesos arbustos, y cae a un pozo fangoso, que amortigua la caída. Cuando quiere levantarse para explorar el entorno, el terreno vuelve a ceder, y vuelve a caer, cayendo en una galería.
+
+En esta galería, encontraremos una biblioteca con un libro sobre brujería.
+
+## Mapa
+
+El mapa es coherente, repartiéndose entre la carretera y el pueblo de Mititz.
+
+
+/---------------------\
+|       Leyenda       |
+|---------------------|
+|**Ctr-1 - inicio     |
+|Ctr     - carretera  |
+|Cll     - calle      |
+|Biblio  - biblioteca |
+\---------------------/
+
+         1         2         3         4         5        6         7         8
+1234567890123456789012345678901234567890123456789012345679012345678901234567890
+-------------------------------------------------------------------------------
+
+/---------\     /---------\     /---------\     /---------\     /---------\
+|Iglesia  |     |Plaza    |     |Calle    |     |Camino2  |     |Claro    |
+|         | <-> |         | <-> |         | <-> |         | <-> |         |
+|    altar|     |         |     |         |     |         |     |         |
+\---------/     \---------/     \---------/     \---------/     \---------/
+     
+      \                                              ^               ^
+       \                                             |  [caída]      |
+        \  [abajo]                                   V               V
+         \                                
+          \     /---------\                         (1)         /---------\
+           \->  |Cripta   |                                     |Camino   |
+                |         |                                     |         |
+                |Estatua  |                                     |         |
+                \---------/                                     \---------/
+                   
+                     ^                                               ^
+                     |                                               |
+                     |          /---------\                          |
+                     | [sur]    |Pasaje   |                          | 
+                     \--------> |         |                          |
+                                |         |                          |
+                                \---------/                          |
+                                                                     |
+                                     ^                               |
+                                     |                               |
+                                     V                               V
+                                    
+                /---------\     /---------\                     /---------\
+                |**Ctr-1  |     |Ctr-2    |                     |Ctr-3    |
+                |         | <-> |         |        <->          |         |
+                |Coche    |     |Desvío   |                     |Largo tr |
+                \---------/     \---------/                     \---------/
+
+         1         2         3         4         5        6         7         8
+1234567890123456789012345678901234567890123456789012345679012345678901234567890
+-------------------------------------------------------------------------------
+
+                                                    (1)
+
+                                                     ^
+                                            [caída]  |
+                                                     V
+                                /---------\     /---------\
+                                |Biblio   |     |Pozo     |
+                                |         |     |         |
+                                |   Libro |     |         |
+                                \---------/     \---------/
+
+                                     ^                ^
+                                     |                / [caída]
+                                     V               /
+                                     
+                /---------\     /---------\     /---------\
+                |         |     |Pasaje-2 |     |Pasaje-1 |
+                |         | <-> |         | <-> |         |
+                |         |     |         |     |         |
+                \---------/     \---------/     \---------/
+                                                     ^
+                                                     |
+                                                     V
+                /---------\     /---------\     /---------\
+                |         |     |         |     |         |
+                |         | <-> |         | <-> |         |
+                |         |     |         |     |         |
+                \---------/     \---------/     \---------/
+
+
